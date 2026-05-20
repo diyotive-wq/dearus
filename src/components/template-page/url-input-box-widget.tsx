@@ -158,7 +158,7 @@ export default function UrlInputBox({ data }: Props) {
         >
           <FormField
             name="url_name"
-            control={control}
+            control={control as any}
             formType={FormType.TextField}
             rules={{
               validate: (value: string) => {

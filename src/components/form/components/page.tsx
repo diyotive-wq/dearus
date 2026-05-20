@@ -6,11 +6,12 @@ import SingleUploadForm from "./single-upload/page";
 import { FormType } from "@/components/form/models/formtype";
 import ColorSelection from "./color-selection/page";
 import { Color } from "@/app/[slug]/models/couples";
-import { Control, RegisterOptions, useController } from "react-hook-form";
+import { Control, FieldValues, RegisterOptions, useController } from "react-hook-form";
 import MultipleUploadForm from "./multiple-upload/page";
 
-type FormFieldProps = {
-  control: Control<any>;
+// Menggunakan Generics <TFieldValues> agar control fleksibel mengikuti tipe useForm induk
+type FormFieldProps<TFieldValues extends FieldValues = FieldValues> = {
+  control: Control<TFieldValues>;
   name: string;
   isRequired?: boolean | null;
   title?: string | null;
@@ -25,7 +26,7 @@ type FormFieldProps = {
   hintText?: string | null;
   itemsColor?: Color[] | null;
   min?: string | number | undefined;
-  rules?: RegisterOptions;
+  rules?: RegisterOptions<any, any>; // Melunakkan register options agar tidak bentrok dengan tipe nama spesifik
 };
 
 export default function FormField({
@@ -45,13 +46,13 @@ export default function FormField({
   hintText,
   itemsColor,
   rules,
-}: FormFieldProps) {
+}: FormFieldProps<any>) {
   const {
     fieldState: { error },
   } = useController({ name, control });
+
   const renderField = () => {
     switch (formType) {
-      // Komponen-komponen ini diasumsikan sudah menangani `Controller` sendiri
       case FormType.TextField:
       case FormType.DateTime:
       case FormType.Time:
@@ -104,8 +105,6 @@ export default function FormField({
             control={control}
             maxFiles={max_upload}
             isRequired={isRequired}
-            // item={itemsColor}
-            // fullWidth={fullWidth}
           />
         );
 
