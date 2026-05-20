@@ -4,7 +4,6 @@ import { Couples } from "@/app/[slug]/models/couples";
 import FormField from "./form/components/page";
 import { FormType } from "./form/models/formtype";
 import { useForm } from "./form/page";
-import { useRouter } from "next/navigation";
 import { Timestamp } from "firebase/firestore";
 
 function combineDateAndTime(date: string, time: string): Timestamp | null {
@@ -16,14 +15,13 @@ function combineDateAndTime(date: string, time: string): Timestamp | null {
 
 export default function FormSection() {
   const { getValues } = useForm();
-  const router = useRouter();
-
   const handleSubmit = () => {
     const values = getValues();
 
     const missingFields: string[] = [];
 
-    Object.entries(values).forEach(([key, value]) => {
+    Object.entries(values).forEach(([key, field]) => {
+      const value = field.value;
       const isEmptyString = typeof value === "string" && value.trim() === "";
       const isEmptyFile = value instanceof File && value.size === 0;
       const isNullOrUndefined = value === null || value === undefined;
@@ -36,17 +34,21 @@ export default function FormSection() {
         Object.keys(value).length === 0;
 
       if (isEmptyString || isEmptyFile || isNullOrUndefined || isEmptyObject) {
-        missingFields.push(key);
+        missingFields.push(field.title);
       }
     });
-
+    
     if (missingFields.length > 0) {
-      alert(`Please fill all fields`);
+      alert(`Please fill all fields:\n${missingFields.join("\n")}`);
       return;
     }
 
+    const rawValues = Object.fromEntries(
+      Object.entries(values).map(([key, field]) => [key, field.value])
+    );
+
     const { engagementDate, engagementTime, gallery1, gallery2, ...rest } =
-      values;
+      rawValues;
 
     const coupleTemp: Couples = {
       ...(rest as Omit<Couples, "date" | "gallery_image">),
@@ -74,16 +76,18 @@ export default function FormSection() {
         <div className="w-full sm:w-3/5 rounded-2xl p-4 sm:p-6 bg-white flex flex-col gap-4">
           <FormField
             name="header_image"
-            title="Input heading Picture"
+            // title="Input heading Picture"
+            isCircle={true}
+            isCentered={true}
             formType={FormType.SingleUpload}
           />
-          <FormField
+          {/* <FormField
             name="header_image_potrait"
             title="Input heading Picture (Mobile View)"
             placeholder={"Input heading Picture (9:16)"}
             isPotrait={true}
             formType={FormType.SingleUpload}
-          />
+          /> */}
           <FormField
             name="introduction_title"
             title="Input Introduction Title"
