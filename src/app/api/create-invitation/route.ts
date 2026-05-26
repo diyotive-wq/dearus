@@ -1,12 +1,15 @@
 "use server";
 
 import { adminDb, adminStorage } from "@/firebaseAdmin";
+import { getSession } from "@/hooks/getSessions";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { data, formData } = body;
+
+    const id = await getSession();
 
     // ✅ Cek URL duplikat
     const snapshot = await adminDb
@@ -21,7 +24,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // ✅ Helper Upload ke Firebase Storage (PUBLIC)
     const uploadBase64ToFirebaseStorage = async (dataURL: string, path: string) => {
       if (!dataURL) return "";
 
@@ -39,13 +41,9 @@ export async function POST(req: Request) {
         public: true,
       });
 
-      // ✅ Return URL PUBLIC (tanpa token)
       return `https://storage.googleapis.com/${bucket.name}/${path}`;
     };
 
-    // =============================
-    // ✅ UPLOAD IMAGES (HEADER + GALLERY)
-    // =============================
 
     const urlHeader = await uploadBase64ToFirebaseStorage(
       data?.header_image ?? "",
@@ -81,6 +79,14 @@ export async function POST(req: Request) {
     };
 
     await adminDb.collection("dataCustomer").doc(newId).set(newData);
+
+    await adminDb.collection("dataUsers").doc(id.value ?? "").update({
+      "invitation": {
+        "id" : newId,
+        "url": formData.url_name,
+        "date": data.date
+      }
+    });
 
     return NextResponse.json(
       { message: "Upload success", id: newId, data: newData },

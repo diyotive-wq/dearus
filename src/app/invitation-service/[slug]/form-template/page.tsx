@@ -7,8 +7,7 @@ export default async function FormTemplatePage({
 }: {
   params: { slug: string };
 }) {
-  const {slug} = await params;
-
+  const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
 
   // ✅ Ambil data lewat API, bukan langsung Firestore
@@ -19,13 +18,15 @@ export default async function FormTemplatePage({
 
   if (!res.ok) {
     return (
-      <div className="w-full h-screen flex flex-col items-center justify-center">
-        <h1 className="text-2xl font-semibold text-gray-700 mb-2">
-          Failed to load template
-        </h1>
-        <p className="text-gray-500 text-sm">
-          Server responded with status {res.status}.
-        </p>
+      <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
+        <div className="text-center p-8 bg-white rounded-3xl shadow-sm max-w-sm border border-gray-100">
+          <h1 className="text-xl font-bold text-gray-800 mb-2">
+            Failed to load template
+          </h1>
+          <p className="text-gray-500 text-xs sm:text-sm">
+            Server responded with status {res.status}.
+          </p>
+        </div>
       </div>
     );
   }
@@ -35,20 +36,25 @@ export default async function FormTemplatePage({
   // ✅ Tambahkan fallback jika data tidak ditemukan
   if (!data) {
     return (
-      <div className="w-full h-screen flex flex-col items-center justify-center">
-        <h1 className="text-2xl font-semibold text-gray-700 mb-2">
-          Template not found
-        </h1>
-        <p className="text-gray-500 text-sm">
-          Please check your template URL or try again later.
-        </p>
+      <div className="w-full h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
+        <div className="text-center p-8 bg-white rounded-3xl shadow-sm max-w-sm border border-gray-100">
+          <h1 className="text-xl font-bold text-gray-800 mb-2">
+            Template not found
+          </h1>
+          <p className="text-gray-500 text-xs sm:text-sm">
+            Please check your template URL or try again later.
+          </p>
+        </div>
       </div>
     );
   }
 
   // ✅ Render FormWidget (client component)
   return (
-    <FormWidget data={data} />
+    <div className="min-h-screen w-full bg-gradient-to-b from-[var(--color-primary)] to-[var(--color-primary-light)] py-12 px-4 sm:px-6 lg:px-8 flex justify-center items-center relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[1000px] bg-white/5 rounded-full filter blur-3xl pointer-events-none -z-10" />
+      <FormWidget data={data} />
+    </div>
     // <div className="p-8 flex flex-col bg-[var(--color-primary)] items-center justify-center">
     //   <h1
     //     className={`${dancing.className} text-xl sm:text-2xl md:text-4xl font-bold mb-4 text-white`}

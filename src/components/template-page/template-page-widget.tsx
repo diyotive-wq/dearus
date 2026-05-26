@@ -36,7 +36,7 @@ export default function TemplatePageWidget({
 
     return (
       <div>
-        {confitmationProps && ConfirmationDialog(confitmationProps)}
+        {confitmationProps && <ConfirmationDialog {...confitmationProps} />}
         <BloomTemplatePage data={coupleTempData} />
 
         {/* ✅ Bungkus form pake FormProvider dari react-hook-form */}

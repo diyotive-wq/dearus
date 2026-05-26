@@ -134,104 +134,141 @@ export default function FormWidget({
   };
 
   return (
-    <div className="p-8 flex flex-col bg-[var(--color-primary)] items-center justify-center">
-      <h1
-        className={`${dancing.className} text-xl sm:text-2xl md:text-4xl font-bold mb-4 text-white`}
-      >
-        {data?.template_name} Template
-      </h1>
-      <div className="m-1 sm:m-4"></div>
+    <div className="w-full max-w-4xl flex flex-col items-center">
+      {/* Header Nama Template */}
+      <div className="text-center mb-6 animate-fade-in">
+        <h1 className={`${dancing.className} text-white text-3xl sm:text-4xl md:text-5xl font-bold tracking-wide drop-shadow-md`}>
+          {data?.template_name} Template
+        </h1>
+        <div className="w-12 h-0.5 bg-white rounded-full mx-auto opacity-40 mt-3" />
+      </div>
 
+      {/* Main Container Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 flex flex-col w-full sm:w-3/4 rounded-4xl items-center justify-center gap-4"
+        className="bg-white w-full rounded-3xl p-6 sm:p-10 md:p-12 shadow-2xl border border-white/10 flex flex-col gap-6"
       >
-        {data?.form?.map((form, index) => {
-          if (form.input_type === "single_upload") {
-            return (
-              <FormField
-                key={index}
-                name={form.name!}
-                formType={FormType.SingleUpload}
-                title={form.title}
-                isCentered
-                isCircle={form.upload_form === "circle"}
-                placeholder={form.hint_text}
-                control={control}
-              />
-            );
-          }
-          if (form.input_type === "time_input") {
-            return (
-              <FormField
-                key={index}
-                name={form.name!}
-                formType={FormType.Time}
-                title={form.title}
-                placeholder={form.hint_text}
-                control={control}
-              />
-            );
-          }
-          if (form.input_type === "date_input") {
-            return (
-              <FormField
-                key={index}
-                name={form.name!}
-                min={new Date().toISOString().split("T")[0]}
-                formType={FormType.DateTime}
-                title={form.title}
-                placeholder={form.hint_text}
-                control={control}
-              />
-            );
-          }
-          if (form.input_type === "color_selection_input") {
-            return (
-              <FormField
-                key={index}
-                name={form.name!}
-                formType={FormType.ColorSelection}
-                title={form.title}
-                itemsColor={form.color_options}
-                placeholder={form.hint_text}
-                control={control}
-              />
-            );
-          }
-          if (form.input_type === "multiple_upload") {
-            return (
-              <FormField
-                key={index}
-                name={form.name!}
-                formType={FormType.MultipleUpload}
-                title={form.title}
-                max_upload={form.max_upload}
-                itemsColor={form.color_options}
-                placeholder={form.hint_text}
-                control={control}
-              />
-            );
-          }
-          return (
-            <FormField
-              key={index}
-              name={form.name!}
-              formType={FormType.TextField}
-              title={form.title}
-              placeholder={form.hint_text}
-              control={control}
-            />
-          );
-        })}
+        {/* Pembagian Grid Layout untuk Form Fields */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 w-full">
+          {data?.form?.map((form, index) => {
+            // Evaluasi lebar field (Full-Width khusus untuk Upload, Alamat, dan Color Selection)
+            const isFullWidth = 
+              form.input_type === "single_upload" || 
+              form.input_type === "multiple_upload" || 
+              form.input_type === "color_selection_input" ||
+              form.name?.includes("address") ||
+              form.name?.includes("maps");
 
-        <button
-          type="submit"
-          className="mt-6 bg-[var(--color-primary)] text-white font-semibold px-6 py-2 rounded-lg cursor-pointer"
-        >
-          Submit
-        </button>
+            const fieldContent = (() => {
+              if (form.input_type === "single_upload") {
+                return (
+                  <FormField
+                    key={index}
+                    name={form.name!}
+                    formType={FormType.SingleUpload}
+                    title={form.title}
+                    isCentered
+                    isCircle={form.upload_form === "circle"}
+                    placeholder={form.hint_text}
+                    control={control}
+                  />
+                );
+              }
+              if (form.input_type === "time_input") {
+                return (
+                  <FormField
+                    key={index}
+                    name={form.name!}
+                    formType={FormType.Time}
+                    title={form.title}
+                    placeholder={form.hint_text}
+                    control={control}
+                  />
+                );
+              }
+              if (form.input_type === "date_input") {
+                return (
+                  <FormField
+                    key={index}
+                    name={form.name!}
+                    min={new Date().toISOString().split("T")[0]}
+                    formType={FormType.DateTime}
+                    title={form.title}
+                    placeholder={form.hint_text}
+                    control={control}
+                  />
+                );
+              }
+              if (form.input_type === "color_selection_input") {
+                return (
+                  <ColorSelectionWrapper key={index}>
+                    <FormField
+                      name={form.name!}
+                      formType={FormType.ColorSelection}
+                      title={form.title}
+                      itemsColor={form.color_options}
+                      placeholder={form.hint_text}
+                      control={control}
+                    />
+                  </ColorSelectionWrapper>
+                );
+              }
+              if (form.input_type === "multiple_upload") {
+                return (
+                  <FormField
+                    key={index}
+                    name={form.name!}
+                    formType={FormType.MultipleUpload}
+                    title={form.title}
+                    max_upload={form.max_upload}
+                    itemsColor={form.color_options}
+                    placeholder={form.hint_text}
+                    control={control}
+                  />
+                );
+              }
+              return (
+                <FormField
+                  key={index}
+                  name={form.name!}
+                  formType={FormType.TextField}
+                  title={form.title}
+                  placeholder={form.hint_text}
+                  control={control}
+                />
+              );
+            })();
+
+            return (
+              <div 
+                key={index} 
+                className={`${isFullWidth ? "md:col-span-2" : "col-span-1"} flex flex-col w-full`}
+              >
+                {fieldContent}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Tombol Aksi Cetak Utama */}
+        <div className="w-full flex justify-center mt-6 border-t border-gray-100 pt-6">
+          <button
+            type="submit"
+            className="w-full sm:w-1/3 bg-[var(--color-primary)] text-white font-bold py-3.5 px-8 rounded-2xl tracking-wide shadow-lg shadow-[var(--color-primary)]/20 hover:bg-[var(--color-primary-light)] hover:shadow-xl hover:shadow-[var(--color-primary)]/30 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 focus:outline-none cursor-pointer text-center text-sm sm:text-base"
+          >
+            Generate Preview
+          </button>
+        </div>
       </form>
+    </div>
+  );
+}
+
+// Komponen mini pembungkus dekoratif agar letak Color Pilihan lebih estetis
+function ColorSelectionWrapper({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="bg-gray-50/50 border border-gray-100 rounded-2xl p-4 sm:p-5 w-full mt-2">
+      {children}
     </div>
   );
 }

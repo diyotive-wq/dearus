@@ -37,6 +37,8 @@ export async function POST(req: Request) {
 
     const doc = await adminDb.collection("dataUsers").doc();
 
+    delete data.password;
+
     await doc.set({
       id: doc.id,
       ...data,

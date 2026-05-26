@@ -28,7 +28,8 @@ export async function GET() {
         email: result?.email ?? null,
         phone_number: result?.phone_number ?? null,
         birthdate: result?.birthdate ?? null,
-        address: result?.address ?? null
+        address: result?.address ?? null,
+        invitation: result?.invitation ?? null
     };
 
     return NextResponse.json({ state: "success", data: data }, { status: 200 });

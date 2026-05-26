@@ -20,12 +20,21 @@ export default function BloomDatePage({ data }: { data?: Couples }) {
 
     if (data.date instanceof Timestamp) return data.date.toDate();
 
+    let newDate;
+
     const dateObj = data.date as { seconds: number; nanoseconds: number };
     if (dateObj.seconds !== undefined && dateObj.nanoseconds !== undefined) {
-      return new Timestamp(dateObj.seconds, dateObj.nanoseconds).toDate();
+      
+      newDate = new Timestamp(dateObj.seconds, dateObj.nanoseconds).toDate()
+
+
+      return newDate;
     }
 
-    return new Date(data.date as any);
+    newDate = new Date(data.date as any);
+
+
+    return newDate;
   };
 
   const parsedDate = getDate();
@@ -91,7 +100,7 @@ export default function BloomDatePage({ data }: { data?: Couples }) {
           }}
         >
           {parsedDate
-            ? format(new Date(parsedDate), "EEEE, dd MMMM yyyy", {
+            ? format(parsedDate, "EEEE, dd MMMM yyyy", {
                 locale: id,
               })
             : "[Engagement Date]"}
@@ -110,7 +119,7 @@ export default function BloomDatePage({ data }: { data?: Couples }) {
           className={`text-sm sm:text-lg md:text-xl mt-2 font-medium mb-8`}
         >
           {parsedDate
-            ? format(new Date(parsedDate), "HH:MM", {
+            ? format(parsedDate, "HH:mm", {
                 locale: id,
               })
             : "[Engagement Time]"}

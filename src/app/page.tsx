@@ -47,28 +47,28 @@ export default function Home() {
         {/* Dekorasi background abstrak lembut */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--color-primary-light)] rounded-full filter blur-3xl opacity-30 -z-10 translate-x-1/3 -translate-y-1/3" />
         
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12 pt-24 pb-16 px-6 sm:px-12 lg:px-16">
+        <div className=" mx-auto flex flex-col md:flex-row justify-between items-center gap-10 sm:gap-12 pt-24 pb-16 px-6 sm:px-12 lg:px-16">
           
           {/* Sisi Kiri: Teks */}
-          <div className="w-full md:w-1/2 flex flex-col justify-center text-center md:text-left">
+          <div className="w-full text-sm sm:text-base md:w-1/2 flex flex-col justify-center text-left">
             <span className="text-xs md:text-sm font-bold tracking-widest text-[var(--color-primary)] uppercase mb-2 block">
                there's a story in every love
             </span>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-9xl leading-tight tracking-tight">
+            <h1 className="text-2xl text-left sm:text-4xl lg:text-5xl font-extrabold text-gray-9xl leading-tight tracking-tight">
               Welcome to <span className="text-[var(--color-primary)]">Dear Us</span>
             </h1>
-            <p className="text-base sm:text-lg lg:text-xl font-medium text-gray-700 mt-4 leading-relaxed max-w-xl mx-auto md:mx-0">
+            <p className="text-sm text-left sm:text-lg lg:text-xl font-medium text-gray-700 mt-2 sm:mt-4 leading-relaxed max-w-xl mx-auto md:mx-0">
               Beautiful Engagement Invitations & Timeless Documentation in One Place
             </p>
-            <p className="text-xs sm:text-sm lg:text-base font-normal mt-4 text-gray-500 max-w-md mx-auto md:mx-0 leading-relaxed">
+            <p className="text-xs sm:text-sm lg:text-base font-normal mt-2 sm:mt-4 text-gray-500 max-w-md mx-auto md:mx-0 leading-relaxed">
               You’re about to begin a new chapter in life, and every chapter
               deserves to be remembered beautifully...
             </p>
           </div>
 
           {/* Sisi Kanan: Gambar */}
-          <div className="w-full sm:w-4/5 md:w-1/2 flex justify-center">
-            <div className="relative w-full aspect-[4/3] max-w-lg drop-shadow-2xl transition-transform duration-500 hover:scale-[1.02]">
+          <div className="w-full sm:w-4/5 md:w-1/2">
+            <div className="relative w-full aspect-4/3 max-w-lg drop-shadow-2xl transition-transform duration-500 hover:scale-[1.02]">
               <Image
                 src={"/assets/icons/landing_images_2.png"}
                 fill
